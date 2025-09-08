@@ -34,7 +34,6 @@ impl Drop for Client {
 pub mod tests {
     use googletest::prelude::*;
     use rustest::{fixture, test};
-    use std::hint::black_box;
     use std::sync::Mutex;
     use std::thread::sleep;
     use std::time::{Duration, UNIX_EPOCH};
@@ -71,11 +70,6 @@ pub mod tests {
                 .as_micros()
         );
         assert_that!(result, eq(4));
-
-        // force the compiler to keep `client` around until the end.
-        // otherwise it can drop it earlier and then the next test starts before
-        // we print our last timestamp, thus making the test fail spuriously.
-        let _ = black_box(black_box(client).add(2, 2));
     }
 
     #[test]
@@ -105,11 +99,6 @@ pub mod tests {
                 .as_micros()
         );
         assert_that!(result, eq(4));
-
-        // force the compiler to keep `client` around until the end.
-        // otherwise it can drop it earlier and then the next test starts before
-        // we print our last timestamp, thus making the test fail spuriously.
-        let _ = black_box(black_box(client).add(2, 2));
     }
 }
 
