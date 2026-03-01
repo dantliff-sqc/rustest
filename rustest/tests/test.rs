@@ -50,6 +50,22 @@ fn test_fixture_number(number: ANumber) {
     assert_eq!(*number, 5)
 }
 
+// Once Fixtures can be a mutable struct
+struct Simple {
+    x: u32,
+}
+#[fixture(scope=once)]
+fn AStruct() -> Simple {
+    Simple { x: 5 }
+}
+
+// Fixtures deref_mut to their mutable inner value (Box<u32> here).
+#[test]
+fn test_fixture_mut(mut s: AStruct) {
+    s.x += 42;
+    assert_eq!(s.x, 47)
+}
+
 // Fixture's name can be specified with the `name` attribute.
 // The function's name is useless in this case and can be anything.
 #[fixture(name = ANewNumber)]
