@@ -59,11 +59,18 @@ fn AStruct() -> Simple {
     Simple { x: 5 }
 }
 
-// Fixtures deref_mut to their mutable inner value (Box<u32> here).
+// Fixtures deref_mut to their mutable inner value (`Simple` struct here).
 #[test]
 fn test_fixture_mut(mut s: AStruct) {
     s.x += 42;
     assert_eq!(s.x, 47)
+}
+
+// Some of the time, this test will run after `test_fixture_mut` and confirm that the fixture value
+// wasn't somehow modified between tests.
+#[test]
+fn test_fixture_mut_isolated(s: AStruct) {
+    assert_eq!(s.x, 5);
 }
 
 // Fixture's name can be specified with the `name` attribute.
